@@ -1,13 +1,14 @@
-﻿namespace MedicalAppointments.Models
+﻿using MedicalAppointments.Base;
+
+namespace MedicalAppointments.Models
 {
-    public class PrivateOffice
+    public class PrivateOffice: BaseEntity
     {
-        public int Id { get; set; }
+        public Guid DoctorId { get; set; }
+        public Doctor? Doctor { get; set; }
         public string City { get; set; }
         public string Address { get; set; }
         public string Phone { get; set; }
-        public int DoctorId { get; set; }
-        public Doctor Doctor { get; set; } = null!;
 
     }
 }

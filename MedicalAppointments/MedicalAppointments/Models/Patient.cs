@@ -1,12 +1,15 @@
-﻿namespace MedicalAppointments.Models
+﻿using MedicalAppointments.Base;
+using System.ComponentModel.DataAnnotations;
+
+namespace MedicalAppointments.Models
 {
-    public class Patient
+    public class Patient: BaseEntity
     {
-        public int Id { get; set; }
+        [Required]
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
-        public ICollection<MedicalExamination> MedicalExaminations { get; set; }
+        public ICollection<MedicalExamination>? MedicalExamination { get; set; }
 
     }
 }

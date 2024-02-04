@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedicalAppointments.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240204102332_InitialCreate")]
+    [Migration("20240204130312_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -27,11 +27,9 @@ namespace MedicalAppointments.Migrations
 
             modelBuilder.Entity("MedicalAppointments.Models.Doctor", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -41,8 +39,8 @@ namespace MedicalAppointments.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MedicalSpecialityId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("MedicalSpecialityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -53,11 +51,11 @@ namespace MedicalAppointments.Migrations
 
             modelBuilder.Entity("MedicalAppointments.Models.MedicalExamination", b =>
                 {
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Duration")
                         .HasColumnType("int");
@@ -74,11 +72,9 @@ namespace MedicalAppointments.Migrations
 
             modelBuilder.Entity("MedicalAppointments.Models.MedicalSpeciality", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -91,11 +87,9 @@ namespace MedicalAppointments.Migrations
 
             modelBuilder.Entity("MedicalAppointments.Models.Patient", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
@@ -115,11 +109,9 @@ namespace MedicalAppointments.Migrations
 
             modelBuilder.Entity("MedicalAppointments.Models.PrivateOffice", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -129,8 +121,8 @@ namespace MedicalAppointments.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -144,13 +136,51 @@ namespace MedicalAppointments.Migrations
                     b.ToTable("PrivateOffices");
                 });
 
+            modelBuilder.Entity("MedicalAppointments.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("MedicalAppointments.Models.Doctor", b =>
                 {
                     b.HasOne("MedicalAppointments.Models.MedicalSpeciality", "MedicalSpeciality")
                         .WithMany("Doctors")
-                        .HasForeignKey("MedicalSpecialityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MedicalSpecialityId");
 
                     b.Navigation("MedicalSpeciality");
                 });
@@ -158,13 +188,13 @@ namespace MedicalAppointments.Migrations
             modelBuilder.Entity("MedicalAppointments.Models.MedicalExamination", b =>
                 {
                     b.HasOne("MedicalAppointments.Models.Doctor", "Doctor")
-                        .WithMany("MedicalExaminations")
+                        .WithMany("MedicalExamination")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MedicalAppointments.Models.Patient", "Patient")
-                        .WithMany("MedicalExaminations")
+                        .WithMany("MedicalExamination")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -177,7 +207,7 @@ namespace MedicalAppointments.Migrations
             modelBuilder.Entity("MedicalAppointments.Models.PrivateOffice", b =>
                 {
                     b.HasOne("MedicalAppointments.Models.Doctor", "Doctor")
-                        .WithOne("Office")
+                        .WithOne("PrivateOffice")
                         .HasForeignKey("MedicalAppointments.Models.PrivateOffice", "DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -187,9 +217,9 @@ namespace MedicalAppointments.Migrations
 
             modelBuilder.Entity("MedicalAppointments.Models.Doctor", b =>
                 {
-                    b.Navigation("MedicalExaminations");
+                    b.Navigation("MedicalExamination");
 
-                    b.Navigation("Office");
+                    b.Navigation("PrivateOffice");
                 });
 
             modelBuilder.Entity("MedicalAppointments.Models.MedicalSpeciality", b =>
@@ -199,7 +229,7 @@ namespace MedicalAppointments.Migrations
 
             modelBuilder.Entity("MedicalAppointments.Models.Patient", b =>
                 {
-                    b.Navigation("MedicalExaminations");
+                    b.Navigation("MedicalExamination");
                 });
 #pragma warning restore 612, 618
         }

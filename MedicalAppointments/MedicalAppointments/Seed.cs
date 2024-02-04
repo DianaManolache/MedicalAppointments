@@ -19,7 +19,6 @@ namespace MedicalAppointments
         {
             if (!dataContext.MedicalExaminations.Any())
             {
-
                 var doctor = new Doctor()
                 {
                     FirstName = "Elena",
@@ -28,9 +27,7 @@ namespace MedicalAppointments
                     {
                         Name = "General Medicine"
                     },
-
-
-                    Office = new PrivateOffice()
+                    PrivateOffice = new PrivateOffice()
                     {
                         City = "Bucuresti",
                         Address = "Bd. Iuliu Maniu, nr. 27A",
@@ -40,8 +37,6 @@ namespace MedicalAppointments
 
                 dataContext.Doctors.Add(doctor);
                 dataContext.SaveChanges();
-
-                doctor.Office.DoctorId = doctor.Id;
 
                 var medicalExaminations = new List<MedicalExamination>()
                     {
@@ -56,7 +51,7 @@ namespace MedicalAppointments
                             },
                             Time = new DateTime(2024, 3, 27),
                             Duration = 30
-                        },
+                        }
                     };
 
                 dataContext.MedicalExaminations.AddRange(medicalExaminations);

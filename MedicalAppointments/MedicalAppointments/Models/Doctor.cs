@@ -1,13 +1,15 @@
-﻿namespace MedicalAppointments.Models
+﻿using MedicalAppointments.Base;
+using System.ComponentModel.DataAnnotations;
+
+namespace MedicalAppointments.Models
 {
-    public class Doctor
+    public class Doctor: BaseEntity
     {
-        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public MedicalSpeciality MedicalSpeciality { get; set; }
-        public PrivateOffice? Office { get; set; }
-        public ICollection<MedicalExamination> MedicalExaminations { get; set; }
-
+        public Guid? MedicalSpecialityId { get; set; }
+        public MedicalSpeciality? MedicalSpeciality { get; set; }
+        public PrivateOffice? PrivateOffice { get; set; }
+        public ICollection<MedicalExamination>? MedicalExamination { get; set; }
     }
 }
