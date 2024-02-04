@@ -1,5 +1,7 @@
 using MedicalAppointments;
 using MedicalAppointments.Data;
+using MedicalAppointments.Interfaces;
+using MedicalAppointments.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddTransient<Seed>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+builder.Services.AddScoped<IMedicalSpecialityRepository, MedicalSpecialityRepository>();
+builder.Services.AddScoped<IPrivateOfficeRepository, PrivateOfficeRepository>();
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

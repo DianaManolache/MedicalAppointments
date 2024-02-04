@@ -135,3 +135,5 @@ C:\Users\Diana\Documents\GitHub\MedicalAppointments\MedicalAppointments\MedicalA
 C:\Users\Diana\Documents\GitHub\MedicalAppointments\MedicalAppointments\MedicalAppointments\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 C:\Users\Diana\Documents\GitHub\MedicalAppointments\MedicalAppointments\MedicalAppointments\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Diana\Documents\GitHub\MedicalAppointments\MedicalAppointments\MedicalAppointments\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\Users\Diana\Documents\GitHub\MedicalAppointments\MedicalAppointments\MedicalAppointments\bin\Debug\net8.0\AutoMapper.dll
+C:\Users\Diana\Documents\GitHub\MedicalAppointments\MedicalAppointments\MedicalAppointments\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
