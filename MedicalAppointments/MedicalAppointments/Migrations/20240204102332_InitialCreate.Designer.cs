@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedicalAppointments.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240204013249_InitialCreate")]
+    [Migration("20240204102332_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -115,8 +115,11 @@ namespace MedicalAppointments.Migrations
 
             modelBuilder.Entity("MedicalAppointments.Models.PrivateOffice", b =>
                 {
-                    b.Property<int>("DoctorId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -126,13 +129,17 @@ namespace MedicalAppointments.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Phone")
-                        .HasColumnType("int");
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("DoctorId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId")
+                        .IsUnique();
 
                     b.ToTable("PrivateOffices");
                 });
@@ -170,7 +177,7 @@ namespace MedicalAppointments.Migrations
             modelBuilder.Entity("MedicalAppointments.Models.PrivateOffice", b =>
                 {
                     b.HasOne("MedicalAppointments.Models.Doctor", "Doctor")
-                        .WithOne("PrivateOffice")
+                        .WithOne("Office")
                         .HasForeignKey("MedicalAppointments.Models.PrivateOffice", "DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -182,8 +189,7 @@ namespace MedicalAppointments.Migrations
                 {
                     b.Navigation("MedicalExaminations");
 
-                    b.Navigation("PrivateOffice")
-                        .IsRequired();
+                    b.Navigation("Office");
                 });
 
             modelBuilder.Entity("MedicalAppointments.Models.MedicalSpeciality", b =>

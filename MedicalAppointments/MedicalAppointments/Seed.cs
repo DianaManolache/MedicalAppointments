@@ -17,58 +17,48 @@ namespace MedicalAppointments
 
         public void SeedDataContext()
         {
-            if (!dataContext.MedicalSpecialities.Any())
-            {
-                var medicalSpecialities = new List<MedicalSpeciality>()
-                {
-                    new MedicalSpeciality()
-                    {
-                        Name = "Dermatology"
-                    },
-                    new MedicalSpeciality()
-                    {
-                        Name = "Cardiology"
-                    },
-                    new MedicalSpeciality()
-                    {
-                        Name = "Pediatrics"
-                    }
-                };
-                dataContext.MedicalSpecialities.AddRange(medicalSpecialities);
-                dataContext.SaveChanges();
-            }
-
             if (!dataContext.MedicalExaminations.Any())
             {
-                var medicalExaminations = new List<MedicalExamination>()
+
+                var doctor = new Doctor()
                 {
-                    new MedicalExamination()
+                    FirstName = "Elena",
+                    LastName = "Martin",
+                    MedicalSpeciality = new MedicalSpeciality()
                     {
-                        Doctor = new Doctor()
-                        {
-                            FirstName = "Elena",
-                            LastName = "Martin",
-                            PrivateOffice = new PrivateOffice()
-                            {
-                                City = "Bucuresti",
-                                Address = "Bd. Iuliu Maniu, nr. 27A",
-                                Phone = 0740213987
-                            }
-                        },
-
-                        Patient = new Patient()
-                        {
-                            FirstName = "Diana",
-                            LastName = "Manolache",
-                            BirthDate = new DateTime(2000, 1, 1)
-                        },
-
-                        Time = new DateTime(2024, 3, 27),
-                        Duration = 30
+                        Name = "General Medicine"
                     },
 
 
+                    Office = new PrivateOffice()
+                    {
+                        City = "Bucuresti",
+                        Address = "Bd. Iuliu Maniu, nr. 27A",
+                        Phone = "0740213987"
+                    }
                 };
+
+                dataContext.Doctors.Add(doctor);
+                dataContext.SaveChanges();
+
+                doctor.Office.DoctorId = doctor.Id;
+
+                var medicalExaminations = new List<MedicalExamination>()
+                    {
+                        new MedicalExamination()
+                        {
+                            Doctor = doctor,
+                            Patient = new Patient()
+                            {
+                                FirstName = "Diana",
+                                LastName = "Manolache",
+                                BirthDate = new DateTime(2000, 1, 1)
+                            },
+                            Time = new DateTime(2024, 3, 27),
+                            Duration = 30
+                        },
+                    };
+
                 dataContext.MedicalExaminations.AddRange(medicalExaminations);
                 dataContext.SaveChanges();
             }

@@ -90,15 +90,16 @@ namespace MedicalAppointments.Migrations
                 name: "PrivateOffices",
                 columns: table => new
                 {
-                    DoctorId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<int>(type: "int", nullable: false)
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DoctorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PrivateOffices", x => x.DoctorId);
+                    table.PrimaryKey("PK_PrivateOffices", x => x.Id);
                     table.ForeignKey(
                         name: "FK_PrivateOffices_Doctors_DoctorId",
                         column: x => x.DoctorId,
@@ -116,6 +117,12 @@ namespace MedicalAppointments.Migrations
                 name: "IX_MedicalExaminations_PatientId",
                 table: "MedicalExaminations",
                 column: "PatientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PrivateOffices_DoctorId",
+                table: "PrivateOffices",
+                column: "DoctorId",
+                unique: true);
         }
 
         /// <inheritdoc />
