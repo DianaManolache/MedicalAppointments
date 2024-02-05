@@ -11,5 +11,6 @@ namespace MedicalAppointments.Interfaces
         bool CreateMedicalSpeciality(MedicalSpeciality medicalSpeciality);
         bool Save();
         bool UpdateMedicalSpeciality(MedicalSpeciality medicalSpeciality);
+        bool DeleteMedicalSpeciality(MedicalSpeciality medicalSpeciality);
     }
 }

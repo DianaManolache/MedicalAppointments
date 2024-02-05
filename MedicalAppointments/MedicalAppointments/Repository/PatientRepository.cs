@@ -50,5 +50,11 @@ namespace MedicalAppointments.Repository
             var updated = _context.SaveChanges();
             return updated >= 0 ? true : false;
         }
+
+        public bool DeletePatient(Patient patient)
+        {
+            _context.Patients.Remove(patient);
+            return Save();
+        }
     }
 }

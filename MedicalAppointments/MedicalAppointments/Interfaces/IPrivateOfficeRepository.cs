@@ -11,6 +11,7 @@ namespace MedicalAppointments.Interfaces
         bool CreatePrivateOffice(PrivateOffice privateOffice);
         bool Save();
         bool UpdatePrivateOffice(PrivateOffice privateOffice);
+        bool DeletePrivateOffice(PrivateOffice privateOffice);
 
     }
 }

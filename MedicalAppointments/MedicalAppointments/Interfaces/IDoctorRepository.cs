@@ -11,6 +11,7 @@ namespace MedicalAppointments.Interfaces
         bool CreateDoctor(Guid PatientId, Doctor doctor);
         bool Save();
         bool UpdateDoctor(Guid PatientId, Doctor doctor);
+        bool DeleteDoctor(Doctor doctor);
 
     }
 }

@@ -120,6 +120,36 @@ namespace MedicalAppointments.Controllers
 
             return Ok("Successfully updated");
         }
+
+        [HttpDelete("{medicalSpecialityId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
+        public IActionResult DeleteMedicalSpeciality(Guid medicalSpecialityId)
+        {
+            if (!_medicalSpecialityRepository.MedicalSpecialityExists(medicalSpecialityId))
+                return NotFound();
+
+            var specialityToDelete = _medicalSpecialityRepository.GetMedicalSpeciality(medicalSpecialityId);
+
+            if (_medicalSpecialityRepository.GetDoctorBySpeciality(medicalSpecialityId).Count() > 0)
+            {
+                ModelState.AddModelError("", $"Speciality {specialityToDelete.Name} cannot be deleted because it is used by at least one doctor");
+                return StatusCode(409, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_medicalSpecialityRepository.DeleteMedicalSpeciality(specialityToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong while deleting");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully deleted");
+        }
         
     }
 }

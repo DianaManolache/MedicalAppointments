@@ -118,6 +118,35 @@ namespace MedicalAppointments.Controllers
 
             return Ok("Successfully updated");
         }
+        [HttpDelete("{PrivateOfficeId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
+        public IActionResult DeletePrivateOffice(Guid PrivateOfficeId)
+        {
+            if (!_privateOfficeRepository.PrivateOfficeExists(PrivateOfficeId))
+                return NotFound();
+
+            var privateOffice = _privateOfficeRepository.GetPrivateOffice(PrivateOfficeId);
+
+         /*   if (_privateOfficeRepository.GetDoctorsFromOffice(PrivateOfficeId).Count() > 0)
+            {
+                ModelState.AddModelError("", $"The office {privateOffice.Address} cannot be deleted because it is used by at least one doctor");
+                return StatusCode(409, ModelState);
+            } */
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_privateOfficeRepository.DeletePrivateOffice(privateOffice))
+            {
+                ModelState.AddModelError("", $"Something went wrong while deleting the office {privateOffice.Address}");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully deleted");
+        }
     }
 
     

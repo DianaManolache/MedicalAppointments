@@ -49,5 +49,11 @@ namespace MedicalAppointments.Repository
             var updated = _context.PrivateOffices.Update(privateOffice);
             return Save();
         }
+
+        public bool DeletePrivateOffice(PrivateOffice privateOffice)
+        {
+            _context.PrivateOffices.Remove(privateOffice);
+            return Save();
+        }
     }
 }

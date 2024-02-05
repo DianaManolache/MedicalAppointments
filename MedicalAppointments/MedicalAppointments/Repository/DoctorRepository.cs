@@ -56,5 +56,11 @@ namespace MedicalAppointments.Repository
             _context.Update(doctor);
             return Save();
         }
+
+        public bool DeleteDoctor(Doctor doctor)
+        {
+            _context.Doctors.Remove(doctor);
+            return Save();
+        }
     }
 }

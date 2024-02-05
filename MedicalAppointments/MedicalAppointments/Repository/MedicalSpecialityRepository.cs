@@ -47,5 +47,11 @@ namespace MedicalAppointments.Repository
             _context.Update(medicalSpeciality);
             return Save();
         }
+
+        public bool DeleteMedicalSpeciality(MedicalSpeciality medicalSpeciality)
+        {
+            _context.MedicalSpecialities.Remove(medicalSpeciality);
+            return Save();
+        }
     }
 }

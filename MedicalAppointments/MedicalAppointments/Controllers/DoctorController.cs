@@ -103,5 +103,24 @@ namespace MedicalAppointments.Controllers
             }
             return Ok("Successfully updated");
         }
+
+        [HttpDelete("{doctorId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteDoctor(Guid doctorId)
+        {
+            if (!_doctorRepository.DoctorExists(doctorId))
+                return NotFound();
+
+            var doctor = _doctorRepository.GetDoctor(doctorId);
+
+            if (!_doctorRepository.DeleteDoctor(doctor))
+            {
+                ModelState.AddModelError("", "Something went wrong while deleting");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Successfully deleted");
+        }
     }
 }
