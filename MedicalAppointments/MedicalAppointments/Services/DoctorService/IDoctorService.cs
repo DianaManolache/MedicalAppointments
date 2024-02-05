@@ -1,17 +1,18 @@
 ﻿using MedicalAppointments.Models;
+using MedicalAppointments.Models.Dto;
 
-namespace MedicalAppointments.Services.DoctorServices
+namespace MedicalAppointments.Services.DoctorService
 {
-    public interface IDoctorRepository
+    public interface IDoctorService
     {
-        ICollection<Doctor> GetDoctors();
+        Task<ICollection<Doctor>> GetDoctors();
         Doctor GetDoctor(Guid doctorId);
         Doctor GetDoctor(string FirstName, string LastName);
         bool DoctorExists(Guid doctorId);
-        bool CreateDoctor(Guid PatientId, Doctor doctor);
+        Task<Doctor> CreateDoctor(Guid PatientId, DoctorDto doctor);
         bool Save();
-        bool UpdateDoctor(Guid PatientId, Doctor doctor);
-        bool DeleteDoctor(Doctor doctor);
+        Task<Doctor> UpdateDoctor(Guid PatientId, DoctorDto doctor);
+        Task DeleteDoctor(Doctor doctor);
 
     }
 }

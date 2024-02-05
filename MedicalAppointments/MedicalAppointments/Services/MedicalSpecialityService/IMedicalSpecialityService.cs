@@ -1,16 +1,17 @@
 ﻿using MedicalAppointments.Models;
+using MedicalAppointments.Models.Dto;
 
 namespace MedicalAppointments.Services.MedicalSpecialityServices
 {
-    public interface IMedicalSpecialityRepository
+    public interface IMedicalSpecialityService
     {
-        ICollection<MedicalSpeciality> GetMedicalSpecialities();
-        ICollection<MedicalSpeciality> GetDoctorBySpeciality(Guid medicalSpecialityId);
+        Task<ICollection<MedicalSpeciality>> GetMedicalSpecialities();
+        Task<ICollection<MedicalSpeciality>> GetDoctorBySpeciality(Guid medicalSpecialityId);
         MedicalSpeciality GetMedicalSpeciality(Guid medicalSpecialityId);
         bool MedicalSpecialityExists(Guid medicalSpecialityId);
-        bool CreateMedicalSpeciality(MedicalSpeciality medicalSpeciality);
+        Task<MedicalSpeciality> CreateMedicalSpeciality(MedicalSpecialityDto medicalSpeciality);
         bool Save();
-        bool UpdateMedicalSpeciality(MedicalSpeciality medicalSpeciality);
-        bool DeleteMedicalSpeciality(MedicalSpeciality medicalSpeciality);
+        Task<MedicalSpeciality> UpdateMedicalSpeciality(MedicalSpecialityDto medicalSpeciality);
+        Task DeleteMedicalSpeciality(MedicalSpeciality medicalSpeciality);
     }
 }

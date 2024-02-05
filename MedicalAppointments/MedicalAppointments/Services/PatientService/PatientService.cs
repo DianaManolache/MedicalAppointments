@@ -1,60 +1,73 @@
 ﻿using MedicalAppointments.Data;
 using MedicalAppointments.Interfaces;
 using MedicalAppointments.Models;
+using MedicalAppointments.Models.Dto;
+using MedicalAppointments.Data.UnitOfWork;
+using MedicalAppointments.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedicalAppointments.Services.PatientServices
 {
-    public class PatientRepository : IPatientRepository
+    public class PatientService : IPatientService
     {
-        private readonly DataContext _context;
+        private readonly IPatientRepository _patientRepository;
+        public IUnitOfWork unitOfWork;
 
-        public PatientRepository(DataContext context)
+        public PatientService(IPatientRepository patientRepository)
         {
-            _context = context;
+            _patientRepository = patientRepository;
         }
 
-        public Patient GetPatient(Guid patientId)
+        public Task<Patient> CreatePatient(Guid DoctorId, PatientDto patient)
         {
-            return _context.Patients.Where(p => p.Id == patientId).FirstOrDefault();
-        }
-
-        public ICollection<Patient> GetPatients()
-        {
-            return _context.Patients.ToList();
-        }
-
-        public bool PatientExists(Guid patientId)
-        {
-            return _context.Patients.Any(p => p.Id == patientId);
-        }
-        public bool CreatePatient(Guid DoctorId, Patient patient)
-        {
-            var examinationEntity = _context.Doctors.Where(d => d.Id == DoctorId).FirstOrDefault();
-            var examination = new MedicalExamination
+            var patient = new Patient()
             {
-                Doctor = examinationEntity,
-                Patient = patient
+                FirstName = patient.FirstName,
+                LastName = patient.LastName,
+                DateOfBirth = patient.DateOfBirth,
             };
-            _context.Add(examination);
-            _context.Add(patient);
-            return Save();
-        }
-        public bool Save()
-        {
-            var saved = _context.SaveChanges();
-            return saved >= 0 ? true : false;
-        }
-
-        public bool UpdatePatient(Patient patient)
-        {
-            var updated = _context.SaveChanges();
-            return updated >= 0 ? true : false;
+            _patientRepository.Add(patient);
+            if (await _patientRepository.Save())
+            {
+                return patient;
+            }
+            return null;
         }
 
         public bool DeletePatient(Patient patient)
         {
-            _context.Patients.Remove(patient);
-            return Save();
+            _patientRepository.DeletePatient(patient);
+            return _patientRepository.Save();
+        }
+
+        public Patient GetPatient(Guid patientId)
+        {
+            return _patientRepository.GetPatient(patientId);
+        }
+
+        public Task<ICollection<Patient>> GetPatients()
+        {
+            return _patientRepository.GetPatients();
+        }
+
+        public bool PatientExists(Guid patientId)
+        {
+            return _patientRepository.PatientExists(patientId);
+        }
+
+        public bool Save()
+        {
+            return _patientRepository.Save();
+        }
+
+        public Task<Patient> UpdatePatient(PatientDto patient)
+        {
+            _patientRepository.UpdatePatient(patient);
+            if (await _patientRepository.Save())
+            {
+                return patient;
+            }
+            return null;
         }
     }
 }

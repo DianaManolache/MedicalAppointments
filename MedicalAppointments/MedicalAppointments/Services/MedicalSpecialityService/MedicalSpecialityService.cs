@@ -1,57 +1,85 @@
 ﻿using MedicalAppointments.Data;
-using MedicalAppointments.Interfaces;
 using MedicalAppointments.Models;
+using MedicalAppointments.Repository;
+using MedicalAppointments.Dto;
+using MedicalAppointments.UnitOfWork;
+using MedicalAppointments.Models.Dto;
 
 namespace MedicalAppointments.Services.MedicalSpecialityServices
 {
-    public class MedicalSpecialityRepository : IMedicalSpecialityRepository
+    public class MedicalSpecialityService : IMedicalSpecialityService
     {
-        private readonly DataContext _context;
-        public MedicalSpecialityRepository(DataContext context)
+        private readonly IMedicalSpecialityRepository _medicalSpecialityRepository;
+        public IUnitOfWork _unitOfWork;
+        public MedicalSpecialityService(IMedicalSpecialityRepository medicalSpecialityRepository)
         {
-            _context = context;
+            _medicalSpecialityRepository = medicalSpecialityRepository;
+        }
+
+        public async Task<MedicalSpeciality> CreateMedicalSpeciality(MedicalSpecialityDto medicalSpeciality)
+        {
+            var ms = new MedicalSpeciality()
+            {
+                Name = medicalSpeciality.Name,
+                Description = medicalSpeciality.Description
+            };
+            _medicalSpecialityRepository.Add(ms);
+            if(await _medicalSpecialityRepository.Save())
+            {
+                return ms;
+            }
+            return null;
+        }
+
+        public async Task DeleteMedicalSpeciality(MedicalSpeciality medicalSpeciality)
+        {
+            _medicalSpecialityRepository.DeleteMedicalSpeciality(medicalSpeciality);
+            await _medicalSpecialityRepository.Save();
+        }
+
+        public Task<ICollection<MedicalSpeciality>> GetDoctorBySpeciality(Guid medicalSpecialityId)
+        {
+            return _medicalSpecialityRepository.GetDoctorBySpeciality(medicalSpecialityId);
+        }
+
+        public Task<ICollection<MedicalSpeciality>> GetMedicalSpecialities()
+        {
+            return _medicalSpecialityRepository.GetMedicalSpecialities();
         }
 
         public MedicalSpeciality GetMedicalSpeciality(Guid medicalSpecialityId)
         {
-            return _context.MedicalSpecialities.Where(d => d.Id == medicalSpecialityId).FirstOrDefault();
+            return _medicalSpecialityRepository.GetMedicalSpeciality(medicalSpecialityId);
         }
-        public ICollection<MedicalSpeciality> GetDoctorBySpeciality(Guid medicalSpecialityId)
-        {
-            return (ICollection<MedicalSpeciality>)_context.MedicalSpecialities.Where(m => m.Id == medicalSpecialityId).Select(d => d.Doctors).ToList();
-        }
-        public ICollection<MedicalSpeciality> GetMedicalSpecialities()
-        {
-            return _context.MedicalSpecialities.OrderBy(d => d.Id).ToList();
-        }
+
         public bool MedicalSpecialityExists(Guid medicalSpecialityId)
         {
-            return _context.MedicalSpecialities.Any(d => d.Id == medicalSpecialityId);
-
-        }
-
-        public bool CreateMedicalSpeciality(MedicalSpeciality medicalSpeciality)
-        {
-            _context.Add(medicalSpeciality);
-            return Save();
+            return _medicalSpecialityRepository.MedicalSpecialityExists(medicalSpecialityId);
         }
 
         public bool Save()
         {
-            var saved = _context.SaveChanges();
-            return saved >= 0 ? true : false;
+            return _medicalSpecialityRepository.Save();
         }
 
-        public bool UpdateMedicalSpeciality(MedicalSpeciality medicalSpeciality)
+        public Task<MedicalSpeciality> UpdateMedicalSpeciality(MedicalSpecialityDto medicalSpeciality)
         {
-            _context.Update(medicalSpeciality);
-            return Save();
-        }
+            var ms = _medicalSpecialityRepository.GetMedicalSpeciality(medicalSpeciality.Id);
+            if (ms == null)
+            {
+                return null;
+            }
+            ms.Name = medicalSpeciality.Name;
 
-        public bool DeleteMedicalSpeciality(MedicalSpeciality medicalSpeciality)
-        {
-            _context.MedicalSpecialities.Remove(medicalSpeciality);
-            return Save();
+            _medicalSpecialityRepository.UpdateMedicalSpeciality(ms);
+            if (await _medicalSpecialityRepository.Save())
+            {
+                return ms;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

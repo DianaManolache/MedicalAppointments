@@ -2,14 +2,14 @@
 
 namespace MedicalAppointments.Services.PatientServices
 {
-    public interface IPatientRepository
+    public interface IPatientService
     {
-        ICollection<Patient> GetPatients();
+        Task<ICollection<Patient>> GetPatients();
         Patient GetPatient(Guid patientId);
         bool PatientExists(Guid patientId);
-        bool CreatePatient(Guid DoctorId, Patient patient);
+        Task <Patient> CreatePatient(Guid DoctorId, PatientDto patient);
         bool Save();
-        bool UpdatePatient(Patient patient);
+        Task <Patient> UpdatePatient(PatientDto patient);
         bool DeletePatient(Patient patient);
     }
 }

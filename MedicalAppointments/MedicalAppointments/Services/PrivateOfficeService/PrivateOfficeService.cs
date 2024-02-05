@@ -1,59 +1,77 @@
-﻿using AutoMapper;
-using MedicalAppointments.Data;
-using MedicalAppointments.Interfaces;
+﻿using MedicalAppointments.Data;
 using MedicalAppointments.Models;
+using MedicalAppointments.Models.Dto;
+using MedicalAppointments.Repository;
+using Microsoft.EntityFrameworkCore;
 
-namespace MedicalAppointments.Service.PrivateOfficeServices
+namespace MedicalAppointments.Services.PrivateOfficeServices
 {
-    public class PrivateOfficeRepository : IPrivateOfficeRepository
+    public class PrivateOfficeService : IPrivateOfficeService
     {
-        private readonly DataContext _context;
-        private readonly IMapper _mapper;
+        private readonly IPrivateOfficeRepository _privateOfficeRepository;
+        public IUnitOfWork _unitOfWork;
 
-        public PrivateOfficeRepository(DataContext context, IMapper mapper)
+        public PrivateOfficeService(IPrivateOfficeRepository privateOfficeRepository)
         {
-            _context = context;
-            _mapper = mapper;
+            _privateOfficeRepository = privateOfficeRepository;
         }
-        public bool PrivateOfficeExists(Guid privateOfficeId)
+
+        public Task<PrivateOffice> CreatePrivateOffice(PrivateOffice privateOffice)
         {
-            return _context.PrivateOffices.Any(p => p.Id == privateOfficeId);
+            var po = new PrivateOffice()
+            {
+                Address = privateOffice.Address,
+            };
+            _privateOfficeRepository.Add(po);
+            if (await _privateOfficeRepository.Save())
+            {
+                return po;
+            }
+            return null;
         }
-        public ICollection<PrivateOffice> GetPrivateOffices()
+
+        public Task DeletePrivateOffice(PrivateOffice privateOffice)
         {
-            return _context.PrivateOffices.ToList();
+            return _privateOfficeRepository.DeletePrivateOffice(privateOffice);
         }
-        public PrivateOffice GetPrivateOffice(Guid privateOfficeId)
-        {
-            return _context.PrivateOffices.FirstOrDefault(p => p.Id == privateOfficeId);
-        }
+
         public PrivateOffice GetOfficeByDoctor(Guid doctorId)
         {
-            return _context.Doctors.Where(o => o.Id == doctorId).Select(d => d.PrivateOffice).FirstOrDefault();
+            return _privateOfficeRepository.GetOfficeByDoctor(doctorId);
         }
 
-        public bool CreatePrivateOffice(PrivateOffice privateOffice)
+        public PrivateOffice GetPrivateOffice(Guid privateOfficeId)
         {
-            _context.Add(privateOffice);
-            return Save();
+            return _privateOfficeRepository.GetPrivateOffice(privateOfficeId);
+        }
+
+        public Task<ICollection<PrivateOffice>> GetPrivateOffices()
+        {
+            return _privateOfficeRepository.GetPrivateOffices();
+        }
+
+        public bool PrivateOfficeExists(Guid privateOfficeId)
+        {
+            return _privateOfficeRepository.PrivateOfficeExists(privateOfficeId);
         }
 
         public bool Save()
         {
-            var saved = _context.SaveChanges();
-            return saved >= 0 ? true : false;
+            return _privateOfficeRepository.Save();
         }
 
-        public bool UpdatePrivateOffice(PrivateOffice privateOffice)
+        public Task<PrivateOffice> UpdatePrivateOffice(PrivateOffice privateOffice)
         {
-            var updated = _context.PrivateOffices.Update(privateOffice);
-            return Save();
-        }
-
-        public bool DeletePrivateOffice(PrivateOffice privateOffice)
-        {
-            _context.PrivateOffices.Remove(privateOffice);
-            return Save();
+            var po = new PrivateOffice()
+            {
+                Address = privateOffice.Address,
+            };
+            _privateOfficeRepository.UpdatePrivateOffice(po);
+            if (await _privateOfficeRepository.Save())
+            {
+                return po;
+            }
+            return null;
         }
     }
 }

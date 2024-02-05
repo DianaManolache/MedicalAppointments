@@ -1,17 +1,18 @@
 ﻿using MedicalAppointments.Models;
+using MedicalAppointments.Models.Dto;
 
 namespace MedicalAppointments.Services.PrivateOfficeServices
 {
-    public interface IPrivateOfficeRepository
+    public interface IPrivateOfficeService
     {
-        ICollection<PrivateOffice> GetPrivateOffices();
+        Task<ICollection<PrivateOffice>> GetPrivateOffices();
         PrivateOffice GetPrivateOffice(Guid privateOfficeId);
         PrivateOffice GetOfficeByDoctor(Guid doctorId);
         bool PrivateOfficeExists(Guid privateOfficeId);
-        bool CreatePrivateOffice(PrivateOffice privateOffice);
+        Task<PrivateOffice> CreatePrivateOffice(PrivateOffice privateOffice);
         bool Save();
-        bool UpdatePrivateOffice(PrivateOffice privateOffice);
-        bool DeletePrivateOffice(PrivateOffice privateOffice);
+        Task<PrivateOffice> UpdatePrivateOffice(PrivateOffice privateOffice);
+        Task DeletePrivateOffice(PrivateOffice privateOffice);
 
     }
 }
