@@ -1,6 +1,5 @@
 ﻿using MedicalAppointments.Models;
 using MedicalAppointments.Models.Dto;
-using MedicalAppointments.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

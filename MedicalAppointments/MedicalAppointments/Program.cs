@@ -8,7 +8,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using MedicalAppointments.Services;
+using MedicalAppointments.Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
 
