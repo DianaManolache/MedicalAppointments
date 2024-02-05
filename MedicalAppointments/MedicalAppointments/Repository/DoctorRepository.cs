@@ -30,5 +30,25 @@ namespace MedicalAppointments.Repository
         {
             return _context.Doctors.Any(d => d.Id == doctorId);
         }
+
+        public bool CreateDoctor(Guid pacientId, Doctor doctor)
+        {
+            var examinationEntity = _context.Patients.Where(a => a.Id == pacientId).FirstOrDefault();
+            var examination = new MedicalExamination()
+            {
+                Patient = examinationEntity,
+                Doctor = doctor,
+            };
+            _context.Add(examination);
+           
+            _context.Add(doctor);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved >= 0 ? true : false;
+        }
     }
 }

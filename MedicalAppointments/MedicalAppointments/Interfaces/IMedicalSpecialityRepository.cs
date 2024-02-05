@@ -8,5 +8,7 @@ namespace MedicalAppointments.Interfaces
         ICollection<MedicalSpeciality> GetDoctorBySpeciality(Guid medicalSpecialityId);
         MedicalSpeciality GetMedicalSpeciality(Guid medicalSpecialityId);
         bool MedicalSpecialityExists(Guid medicalSpecialityId);
+        bool CreateMedicalSpeciality(MedicalSpeciality medicalSpeciality);
+        bool Save();
     }
 }

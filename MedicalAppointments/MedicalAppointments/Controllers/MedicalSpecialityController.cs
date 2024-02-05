@@ -60,7 +60,36 @@ namespace MedicalAppointments.Controllers
             }
             return Ok(doctors);
         }
-    }
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateMedicalSpeciality([FromBody] MedicalSpecialityDto medicalSpecialityCreate)
+        {
+            if (medicalSpecialityCreate == null)
+                return BadRequest(ModelState);
 
-    
+            var specility = _medicalSpecialityRepository.GetMedicalSpecialities()
+                .Where(c => c.Name.Trim().ToUpper() == medicalSpecialityCreate.Name.TrimEnd().ToUpper())
+                .FirstOrDefault();
+
+            if (specility != null)
+            {
+                ModelState.AddModelError("", "Speciality already exists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var specialityMap = _mapper.Map<MedicalSpeciality>(medicalSpecialityCreate);
+
+            if (!_medicalSpecialityRepository.CreateMedicalSpeciality(specialityMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while savin");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully created");
+        }
+    }
 }

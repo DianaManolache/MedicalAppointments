@@ -32,5 +32,16 @@ namespace MedicalAppointments.Repository
             return _context.Doctors.Where(o => o.Id == doctorId).Select(d => d.PrivateOffice).FirstOrDefault();
         }
 
+        public bool CreatePrivateOffice(PrivateOffice privateOffice)
+        {
+            _context.Add(privateOffice);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved >= 0 ? true : false;
+        }
     }
 }

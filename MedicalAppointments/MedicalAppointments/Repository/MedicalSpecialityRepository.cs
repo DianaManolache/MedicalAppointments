@@ -29,5 +29,17 @@ namespace MedicalAppointments.Repository
             return _context.MedicalSpecialities.Any(d => d.Id == medicalSpecialityId);
 
         }
+
+        public bool CreateMedicalSpeciality(MedicalSpeciality medicalSpeciality)
+        {
+            _context.Add(medicalSpeciality);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved >= 0 ? true : false;
+        }
     }
 }

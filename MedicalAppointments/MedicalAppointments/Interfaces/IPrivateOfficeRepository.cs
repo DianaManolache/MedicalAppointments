@@ -8,6 +8,8 @@ namespace MedicalAppointments.Interfaces
         PrivateOffice GetPrivateOffice(Guid privateOfficeId);
         PrivateOffice GetOfficeByDoctor(Guid doctorId);
         bool PrivateOfficeExists(Guid privateOfficeId);
+        bool CreatePrivateOffice(PrivateOffice privateOffice);
+        bool Save();
 
     }
 }

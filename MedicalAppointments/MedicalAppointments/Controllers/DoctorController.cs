@@ -47,5 +47,37 @@ namespace MedicalAppointments.Controllers
             }
             return Ok(doctor);
         }
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateDoctor([FromQuery] Guid PatientId, [FromBody] DoctorDto doctorCreate)
+        {
+            if (doctorCreate == null)
+                return BadRequest(ModelState);
+
+            var doctors = _doctorRepository.GetDoctors()
+                .Where(c => c.LastName.Trim().ToUpper() == doctorCreate.LastName.TrimEnd().ToUpper())
+                .FirstOrDefault();
+
+            if (doctors != null)
+            {
+                ModelState.AddModelError("", "Doctor already exists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var doctorMap = _mapper.Map<Doctor>(doctorCreate);
+
+
+            if (!_doctorRepository.CreateDoctor(PatientId, doctorMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while savin");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully created");
+        }
     }
 }

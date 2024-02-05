@@ -8,6 +8,8 @@ namespace MedicalAppointments.Interfaces
         Doctor GetDoctor(Guid doctorId);
         Doctor GetDoctor(string FirstName, string LastName);
         bool DoctorExists(Guid doctorId);
+        bool CreateDoctor(Guid PatientId, Doctor doctor);
+        bool Save();
 
     }
 }

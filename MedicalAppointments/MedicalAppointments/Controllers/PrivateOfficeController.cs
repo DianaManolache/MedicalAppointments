@@ -59,6 +59,37 @@ namespace MedicalAppointments.Controllers
             }
             return Ok(office);
         }
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreatePrivateOffice([FromBody] PrivateOfficeDto privateOfficeCreate)
+        {
+            if (privateOfficeCreate == null)
+                return BadRequest(ModelState);
+
+            var privateOffice = _privateOfficeRepository.GetPrivateOffices()
+                .Where(c => c.Address.Trim().ToUpper() == privateOfficeCreate.Address.TrimEnd().ToUpper())
+                .FirstOrDefault();
+
+            if (privateOffice != null)
+            {
+                ModelState.AddModelError("", "Office already exists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var officeMap = _mapper.Map<PrivateOffice>(privateOfficeCreate);
+
+            if (!_privateOfficeRepository.CreatePrivateOffice(officeMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while savin");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully created");
+        }
     }
 
     
