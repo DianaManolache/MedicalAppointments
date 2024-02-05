@@ -41,5 +41,11 @@ namespace MedicalAppointments.Repository
             var saved = _context.SaveChanges();
             return saved >= 0 ? true : false;
         }
+
+        public bool UpdateMedicalSpeciality(MedicalSpeciality medicalSpeciality)
+        {
+            _context.Update(medicalSpeciality);
+            return Save();
+        }
     }
 }

@@ -90,6 +90,34 @@ namespace MedicalAppointments.Controllers
 
             return Ok("Successfully created");
         }
+        [HttpPut("{PrivateOfficeId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdatePrivateOffice(Guid PrivateOfficeId, [FromBody] PrivateOfficeDto privateOfficeUpdate)
+        {
+            if (privateOfficeUpdate == null)
+                return BadRequest(ModelState);
+
+         /*   if (PrivateOfficeId != privateOfficeUpdate.Id)
+                return BadRequest(ModelState); */
+
+            if (!_privateOfficeRepository.PrivateOfficeExists(PrivateOfficeId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var officeMap = _mapper.Map<PrivateOffice>(privateOfficeUpdate);
+
+            if (!_privateOfficeRepository.UpdatePrivateOffice(officeMap))
+            {
+                ModelState.AddModelError("", $"Something went wrong while updating the office {privateOfficeUpdate.Address}");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully updated");
+        }
     }
 
     

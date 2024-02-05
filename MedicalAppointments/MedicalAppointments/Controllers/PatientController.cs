@@ -75,5 +75,32 @@ namespace MedicalAppointments.Controllers
 
             return Ok("Successfully created");
         }
+
+        [HttpPut("{patientId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+
+        public IActionResult UpdatePatient(Guid patientId, [FromBody] PatientDto patientUpdate)
+        {
+            if (patientUpdate == null)
+                return BadRequest(ModelState);
+
+            if (!_patientRepository.PatientExists(patientId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var patientMap = _mapper.Map<Patient>(patientUpdate);
+
+            if (!_patientRepository.UpdatePatient(patientMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully updated");
+        }
     }
 }

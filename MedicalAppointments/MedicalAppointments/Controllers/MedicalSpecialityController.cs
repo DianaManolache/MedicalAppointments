@@ -91,5 +91,36 @@ namespace MedicalAppointments.Controllers
 
             return Ok("Successfully created");
         }
+
+        [HttpPut("{medicalSpecialityId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateMedicalSpeciality(Guid medicalSpecialityId, [FromBody] MedicalSpecialityDto medicalSpecialityUpdate)
+        {
+            if (medicalSpecialityUpdate == null)
+                return BadRequest(ModelState);
+
+          /*  if (medicalSpecialityId != medicalSpecialityUpdate.Id)
+                return BadRequest(ModelState); */
+
+            if (!_medicalSpecialityRepository.MedicalSpecialityExists(medicalSpecialityId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var specialityMap = _mapper.Map<MedicalSpeciality>(medicalSpecialityUpdate);
+
+            if (!_medicalSpecialityRepository.UpdateMedicalSpeciality(specialityMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully updated");
+        }
+        
     }
 }
+

@@ -44,5 +44,11 @@ namespace MedicalAppointments.Repository
             var saved = _context.SaveChanges();
             return saved >= 0 ? true : false;
         }
+
+        public bool UpdatePatient(Patient patient)
+        {
+            var updated = _context.SaveChanges();
+            return updated >= 0 ? true : false;
+        }
     }
 }

@@ -9,5 +9,6 @@ namespace MedicalAppointments.Interfaces
         bool PatientExists(Guid patientId);
         bool CreatePatient(Guid DoctorId,Patient patient);
         bool Save();
+        bool UpdatePatient(Patient patient);
     }
 }
