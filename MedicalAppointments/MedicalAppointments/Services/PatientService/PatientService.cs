@@ -20,7 +20,7 @@ namespace MedicalAppointments.Services.PatientServices
 
         public Task<Patient> CreatePatient(Guid DoctorId, PatientDto patient)
         {
-            var patient = new Patient()
+            var patientt = new Patient()
             {
                 FirstName = patient.FirstName,
                 LastName = patient.LastName,
@@ -29,7 +29,7 @@ namespace MedicalAppointments.Services.PatientServices
             _patientRepository.Add(patient);
             if (await _patientRepository.Save())
             {
-                return patient;
+                return patientt;
             }
             return null;
         }

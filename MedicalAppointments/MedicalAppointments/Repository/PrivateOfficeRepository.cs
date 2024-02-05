@@ -30,7 +30,7 @@ namespace MedicalAppointments.Repository
         }
         public async Task<IEnumerable<PrivateOffice>> GetOfficeByDoctor(Guid doctorId)
         {
-            return await _context.PrivateOffices
+            return await _context.PrivateOffices //what kind of data is returned? 
                 .Include(p => p.Doctor)
                 .Where(p => p.DoctorId == doctorId)
                 .ToListAsync();

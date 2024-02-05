@@ -50,7 +50,7 @@ builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<MedicalAppointments.Services.UserService.UserService.IUserService, UserService>();
 builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddSignalR();
 builder.Services.AddDbContext<DataContext>(options =>

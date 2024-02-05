@@ -1,4 +1,5 @@
 ﻿using MedicalAppointments.Models;
+using MedicalAppointments.Models.Dto;
 
 namespace MedicalAppointments.Services.PatientServices
 {

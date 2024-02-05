@@ -6,7 +6,7 @@ namespace MedicalAppointments.Interfaces
     {
         ICollection<PrivateOffice> GetPrivateOffices();
         PrivateOffice GetPrivateOffice(Guid privateOfficeId);
-        ICollection <PrivateOffice> GetOfficeByDoctor(Guid doctorId);
+        Task<IEnumerable<PrivateOffice>> GetOfficeByDoctor(Guid doctorId);
         bool PrivateOfficeExists(Guid privateOfficeId);
         bool CreatePrivateOffice(PrivateOffice privateOffice);
         bool Save();

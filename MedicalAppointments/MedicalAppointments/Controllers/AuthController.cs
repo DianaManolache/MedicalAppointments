@@ -1,5 +1,6 @@
 ﻿using MedicalAppointments.Models;
 using MedicalAppointments.Models.Dto;
+using MedicalAppointments.Services.UserService.UserService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ namespace MedicalAppointments.Controllers
     {
         public static User user = new User();
         private readonly IConfiguration _configuration;
-        private readonly IUserService _userService;
+        private readonly Services.UserService.UserService.IUserService _userService;
 
         public AuthController(IConfiguration configuration)
         {
