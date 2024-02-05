@@ -17,7 +17,7 @@ namespace MedicalAppointments.Controllers
         private readonly ILogger<DoctorController> _logger;
         public DoctorController(ILogger<DoctorController> logger)
         {
-            _logger = loger;
+            _logger = logger;
         }
 
         public DoctorController(IDoctorRepository doctorRepository, IMapper mapper)
@@ -27,16 +27,27 @@ namespace MedicalAppointments.Controllers
         }
         [HttpGet(Name = "GetDoctors"), Authorize(Roles = "Admin, User")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Doctor>))]
-        public IActionResult GetDoctors()
+        public IActionResult GetDoctors(int page = 1, int pageSize = 10)  //Pagination
+        {
+            var totalCount = _doctorRepository.GetDoctors().Count;
+            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+            var productsPerPage = _doctorRepository.GetDoctors()
+                .Skip((page - 1) * pageSize)    
+                .Take(pageSize)
+                .ToList();
+
+            return productsPerPage;
+        }
+    /*    public IActionResult GetDoctors()
         {
             var doctors = _mapper.Map<List<DoctorDto>>(_doctorRepository.GetDoctors());
-            
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             return Ok(doctors);
-        }
+        }*/
 
         [HttpGet("{doctorId}")]
         [ProducesResponseType(200, Type = typeof(Doctor))]
