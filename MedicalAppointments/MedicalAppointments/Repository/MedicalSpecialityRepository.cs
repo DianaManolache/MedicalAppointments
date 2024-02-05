@@ -18,7 +18,14 @@ namespace MedicalAppointments.Repository
         }
         public ICollection<MedicalSpeciality> GetDoctorBySpeciality(Guid medicalSpecialityId)
         {
-            return (ICollection<MedicalSpeciality>)_context.MedicalSpecialities.Where(m => m.Id == medicalSpecialityId).Select(d => d.Doctors).ToList();
+            //make this using select from
+            var doctors = from doctor in _context.Doctors
+                          join medicalSpeciality in _context.MedicalSpecialities
+                          on doctor.MedicalSpecialityId equals medicalSpeciality.Id
+                          where medicalSpeciality.Id == medicalSpecialityId
+                          select doctor;
+            return (ICollection<MedicalSpeciality>)doctors;
+
         }
         public ICollection<MedicalSpeciality> GetMedicalSpecialities()
         {

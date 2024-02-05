@@ -2,6 +2,7 @@
 using MedicalAppointments.Data;
 using MedicalAppointments.Interfaces;
 using MedicalAppointments.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedicalAppointments.Repository
 {
@@ -27,9 +28,12 @@ namespace MedicalAppointments.Repository
         {
             return _context.PrivateOffices.FirstOrDefault(p => p.Id == privateOfficeId);
         }
-        public PrivateOffice GetOfficeByDoctor(Guid doctorId)
+        public async Task<IEnumerable<PrivateOffice>> GetOfficeByDoctor(Guid doctorId)
         {
-            return _context.Doctors.Where(o => o.Id == doctorId).Select(d => d.PrivateOffice).FirstOrDefault();
+            return await _context.PrivateOffices
+                .Include(p => p.Doctor)
+                .Where(p => p.DoctorId == doctorId)
+                .ToListAsync();
         }
 
         public bool CreatePrivateOffice(PrivateOffice privateOffice)

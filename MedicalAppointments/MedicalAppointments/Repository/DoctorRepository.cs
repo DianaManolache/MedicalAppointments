@@ -1,6 +1,7 @@
 ﻿using MedicalAppointments.Data;
 using MedicalAppointments.Interfaces;
 using MedicalAppointments.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedicalAppointments.Repository
 {
@@ -15,6 +16,7 @@ namespace MedicalAppointments.Repository
         public Doctor GetDoctor(Guid doctorId)
         {
             return _context.Doctors.Where(d => d.Id == doctorId).FirstOrDefault();
+
         }
 
         public Doctor GetDoctor(string FirstName, string LastName)
@@ -24,7 +26,7 @@ namespace MedicalAppointments.Repository
 
         public ICollection<Doctor> GetDoctors()
         {
-            return _context.Doctors.OrderBy(d => d.Id).ToList();
+            return _context.Doctors.ToList();
         }
         public bool DoctorExists(Guid doctorId)
         {

@@ -1,8 +1,10 @@
 ﻿using MedicalAppointments.Data;
+using MedicalAppointments.Data.UnitOfWork;
 using MedicalAppointments.Models;
 using MedicalAppointments.Models.Dto;
 using MedicalAppointments.Repository;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace MedicalAppointments.Services.PrivateOfficeServices
 {
