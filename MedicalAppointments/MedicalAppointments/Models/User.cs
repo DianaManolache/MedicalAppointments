@@ -4,17 +4,12 @@ using System.Text.Json.Serialization;
 
 namespace MedicalAppointments.Models
 {
-    public class User: BaseEntity
+    public class User //cu refresh token
     {
-        public string Email { get; set; }
-        public string LastName { get; set; }
-        public string FirstName { get; set; }
-        public string? PhoneNumber { get; set; }
-        public string? Address { get; set; }
-        public string Username { get; set; }
-
-        [JsonIgnore]
-        public string Password { get; set; }
-        public Role Role { get; set; }
+        public string Username { get; set; } = string.Empty;
+        public string PasswordHash { get; set; } = string.Empty;
+        public string RefreshToken { get; set; } = string.Empty;
+        public DateTime TokenCreated { get; set; }
+        public DateTime TokenExpires { get; set; }
     }
 }

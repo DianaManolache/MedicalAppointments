@@ -15,9 +15,7 @@ namespace MedicalAppointments.Data
         public DbSet<MedicalExamination> MedicalExaminations { get; set; }
         public DbSet<MedicalSpeciality> MedicalSpecialities { get; set;}
         public DbSet<Patient> Patients { get; set; }
-        public DbSet<PrivateOffice> PrivateOffices { get; set; }
-        public DbSet<User> Users { get; set; }
-       
+        public DbSet<PrivateOffice> PrivateOffices { get; set; }       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

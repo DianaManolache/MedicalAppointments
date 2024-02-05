@@ -2,6 +2,7 @@
 using MedicalAppointments.Interfaces;
 using MedicalAppointments.Models;
 using MedicalAppointments.Models.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalAppointments.Controllers
@@ -13,12 +14,18 @@ namespace MedicalAppointments.Controllers
         private readonly IDoctorRepository _doctorRepository;
         private readonly IMapper _mapper;
 
+        private readonly ILogger<DoctorController> _logger;
+        public DoctorController(ILogger<DoctorController> logger)
+        {
+            _logger = loger;
+        }
+
         public DoctorController(IDoctorRepository doctorRepository, IMapper mapper)
         {
             _doctorRepository = doctorRepository;
             _mapper = mapper;
         }
-        [HttpGet]
+        [HttpGet(Name = "GetDoctors"), Authorize(Roles = "Admin, User")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Doctor>))]
         public IActionResult GetDoctors()
         {
