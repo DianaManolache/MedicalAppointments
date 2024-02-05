@@ -9,6 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using MedicalAppointments.Services.UserService;
+using MedicalAppointments.Services.UserService.UserService;
+using MedicalAppointments.Models;
+using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +52,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddAuthentication().AddJwtBearer();
+builder.Services.AddSignalR();
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -79,10 +83,20 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapHub<ChatSignalR>("/chat");
+
 app.UseAuthentication();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapPost("broadcast", async(string message, IHubContext<ChatSignalR, IChatSignalR> context) =>
+{
+    await context.Clients.All.ReceiveMessage(message);
+
+    return Results.NoContent();
+});
 
 app.Run();
